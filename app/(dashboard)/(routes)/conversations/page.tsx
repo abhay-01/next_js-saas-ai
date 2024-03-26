@@ -12,7 +12,10 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { ChatCompletion, ChatCompletionMessageParam } from "openai/resources/index.mjs";
+import { ChatCompletion, ChatCompletionMessageParam } from "openai/resources/chat/completions";
+import Image from "next/image";
+import Empty from "@/components/Empty";
+import { cn } from "@/lib/utils";
 
 
 export default function ConversationsPage() {
@@ -33,7 +36,7 @@ export default function ConversationsPage() {
 
         const userMessage: ChatCompletionMessageParam = {
             role: "user",
-            content: data.prompt
+            content: data.prompt,
         };
 
         const newMessages = [...messages, userMessage];
@@ -48,7 +51,7 @@ export default function ConversationsPage() {
 
     }catch(err){
         //TODO : INTEGRATE PRO MODEL
-        console.log(err)
+        console.log("ERROR WHILE POST-->", err);
     }finally{
 
         router.refresh();
@@ -100,21 +103,23 @@ export default function ConversationsPage() {
         </Form>
       </div>
       <div className="space-y-4 mt-4">
-        {messages.map((message, index) => {
-          return (
-            <div
-              key={index}
-              className={`p-4 rounded-lg shadow-md ${
-                message.role === "user"
-                  ? "bg-orange-100"
-                  : "bg-orange-200"
-              }`}
-            >
-              {message.content}
+        {
+          messages.length == 0 && !isLoading && (
+           <Empty label="No Conversation yet"/>
+          )
+        }
+     <div className="flex flex-col-reverse gap-y-4">
+      {
+        messages.map((message)=>(
+          <div 
+          key ={message.content}
+          className={cn("p-8 w-full flex flex-start gap-x-8 rounded-lg", message.role === "user"? "bg-white border border-black/10":"bg-muted")}
+          >
+            {message.content}
             </div>
-          );
-        })}
-        
+        ))
+      }
+      </div>
       </div>
      
     </div>
