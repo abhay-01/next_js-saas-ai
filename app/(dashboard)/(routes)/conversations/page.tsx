@@ -12,16 +12,19 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { ChatCompletion, ChatCompletionMessageParam } from "openai/resources/chat/completions";
-import Image from "next/image";
+import {
+  ChatCompletionMessageParam,
+} from "openai/resources/chat/completions";
 import Empty from "@/components/Empty";
 import { cn } from "@/lib/utils";
-
+import { UserAvatar } from "@/components/user-avatar";
+import { BotAvatar } from "@/components/bot-avatar";
+import { Loader } from "@/components/loader";
 
 export default function ConversationsPage() {
-    const router = useRouter();
+  const router = useRouter();
 
-    const [messages, setMessages] = useState<ChatCompletionMessageParam[]>([]);
+  const [messages, setMessages] = useState<ChatCompletionMessageParam[]>([]);
   const form = useForm<z.infer<typeof promptSchema>>({
     resolver: zodResolver(promptSchema),
     defaultValues: {
@@ -32,30 +35,26 @@ export default function ConversationsPage() {
   const isLoading = form.formState.isSubmitting;
 
   const onSubmit = async (data: z.infer<typeof promptSchema>) => {
-    try{
+    try {
+      const userMessage: ChatCompletionMessageParam = {
+        role: "user",
+        content: data.prompt,
+      };
 
-        const userMessage: ChatCompletionMessageParam = {
-            role: "user",
-            content: data.prompt,
-        };
+      const newMessages = [...messages, userMessage];
 
-        const newMessages = [...messages, userMessage];
+      const response = await axios.post("/api/conversation", {
+        prompt: newMessages,
+      });
 
-        const response = await axios.post("/api/conversation", {
-            prompt: newMessages
-        });
+      setMessages((current) => [...current, userMessage, response.data]);
 
-        setMessages((current)=> [...current, userMessage, response.data])
-
-        form.reset();
-
-    }catch(err){
-        //TODO : INTEGRATE PRO MODEL
-        console.log("ERROR WHILE POST-->", err);
-    }finally{
-
-        router.refresh();
-
+      form.reset();
+    } catch (err) {
+      //TODO : INTEGRATE PRO MODEL
+      console.log("ERROR WHILE POST-->", err);
+    } finally {
+      router.refresh();
     }
   };
 
@@ -103,25 +102,31 @@ export default function ConversationsPage() {
         </Form>
       </div>
       <div className="space-y-4 mt-4">
-        {
-          messages.length == 0 && !isLoading && (
-           <Empty label="No Conversation yet"/>
-          )
-        }
-     <div className="flex flex-col-reverse gap-y-4">
-      {
-        messages.map((message)=>(
-          <div 
-          key ={message.content}
-          className={cn("p-8 w-full flex flex-start gap-x-8 rounded-lg", message.role === "user"? "bg-white border border-black/10":"bg-muted")}
-          >
-            {message.content}
+        {isLoading && (
+          <div className="p-8 rounded-lg w-full flex items-center justify-center bg-muted">
+            <Loader />
+          </div>
+        )}
+        {messages.length == 0 && !isLoading && (
+          <Empty label="No Conversation yet" />
+        )}
+        <div className="flex flex-col-reverse gap-y-4">
+          {messages.map((message) => (
+            <div
+              key={message.content}
+              className={cn(
+                "p-8 w-full flex flex-start gap-x-8 rounded-lg",
+                message.role === "user"
+                  ? "bg-white border border-black/10"
+                  : "bg-muted"
+              )}
+            >
+              {message.role === "user" ? <UserAvatar /> : <BotAvatar />}
+              <p className="text-sm">{message.content}</p>
             </div>
-        ))
-      }
+          ))}
+        </div>
       </div>
-      </div>
-     
     </div>
   );
 }

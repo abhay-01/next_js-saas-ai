@@ -52,6 +52,12 @@ const config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        ellipsis: {
+          '0%': { content: '"."' },
+          '33%': { content: '".."' },
+          '66%': { content: '"..."'},
+          '100%': { content: '"..."'}
+        }
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -71,6 +77,8 @@ const config = {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        ellipsis: 'ellipsis 1s steps(5, end) infinite',
+
       },
     },
   },
