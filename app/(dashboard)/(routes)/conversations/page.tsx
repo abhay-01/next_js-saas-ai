@@ -113,8 +113,8 @@ export default function ConversationsPage() {
         <div className="flex flex-col-reverse gap-y-4">
           {messages.map((message) => (
             <div
-              key={message.content}
-              className={cn(
+            key={typeof message.content === 'string' ? message.content : JSON.stringify(message.content)}
+            className={cn(
                 "p-8 w-full flex flex-start gap-x-8 rounded-lg",
                 message.role === "user"
                   ? "bg-white border border-black/10"
@@ -122,7 +122,13 @@ export default function ConversationsPage() {
               )}
             >
               {message.role === "user" ? <UserAvatar /> : <BotAvatar />}
-              <p className="text-sm">{message.content}</p>
+              <p className="text-sm">
+                {Array.isArray(message.content)
+                  ? message.content.map((part, index) => (
+                      <span key={index}>{JSON.stringify(part)}</span>
+                    ))
+                  : message.content}
+              </p>
             </div>
           ))}
         </div>
