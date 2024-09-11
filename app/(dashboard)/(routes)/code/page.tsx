@@ -116,7 +116,8 @@ export default function CodePage() {
         <div className="flex flex-col-reverse gap-y-4">
           {messages.map((message) => (
             <div
-              key={message.content}
+              key={typeof message.content === 'string' ? message.content : JSON.stringify(message.content)}
+              
               className={cn(
                 "p-8 w-full flex flex-start gap-x-8 rounded-lg",
                 message.role === "user"
@@ -139,7 +140,15 @@ export default function CodePage() {
               )
               }}
               className="text-sm overflow-hidden leading-7"
-              >{message.content || ""}
+              >{Array.isArray(message.content) ? message.content.map(part => {
+                if (typeof part === 'string') {
+                  return part;
+                } else if ('text' in part) {
+                  return part.text;
+                } else {
+                  return '';
+                }
+              }).join('') : message.content || ""}
               </ReactMarkDown>
             </div>
           ))} 
