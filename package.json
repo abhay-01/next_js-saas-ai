@@ -12,6 +12,7 @@
     "@clerk/nextjs": "^4.29.9",
     "@ffmpeg/ffmpeg": "^0.12.10",
     "@hookform/resolvers": "^3.3.4",
+    "@prisma/client": "^5.13.0",
     "@radix-ui/react-avatar": "^1.0.4",
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-label": "^2.0.2",
@@ -30,7 +31,8 @@
     "replicate": "^0.29.1",
     "tailwind-merge": "^2.2.1",
     "tailwindcss-animate": "^1.0.7",
-    "zod": "^3.22.4"
+    "zod": "^3.22.4",
+    "zustand": "^4.5.2"
   },
   "devDependencies": {
     "@types/node": "^20",
@@ -40,6 +42,7 @@
     "eslint": "^8",
     "eslint-config-next": "14.1.0",
     "postcss": "^8",
+    "prisma": "^5.13.0",
     "tailwindcss": "^3.3.0",
     "typescript": "^5"
   }

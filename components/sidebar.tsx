@@ -1,5 +1,4 @@
 "use client";
-
 import Link from "next/link";
 import Image from "next/image";
 import { Montserrat } from "next/font/google";
@@ -13,10 +12,12 @@ import {
   Code,
   ImageIcon,
   Video,
-  Settings
+  Settings,
+  Zap
 } from "lucide-react";
 
 import { usePathname } from "next/navigation";
+import { Button } from "./ui/button";
 
 const montserrat = Montserrat({
   weight: "600",
@@ -49,7 +50,7 @@ const sidebarRoutes = [
     color: "text-blue-400",
   },
   {
-    name: "Video Gneneration",
+    name: "Video Generation",
     path: "/video",
     icon: Video,
     color: "text-pink-300",
@@ -72,6 +73,8 @@ export default function Sidebar() {
   const pathname = usePathname(); //this is used to close the sidebar when the route changes
   //this also helps in highlighting the current route in the sidebar
 
+  // Static counter for API hits
+  const apiHits = 0;
 
   return (
     <div className="space-y-4 py-4 flex flex-col h-full bg-gray-800 text-white">
@@ -106,6 +109,16 @@ export default function Sidebar() {
             </Link>
           ))}
         </div>
+      </div>
+
+      {/* Counter for API Hits */}
+      <div className="flex justify-center items-center bg-gray-700 text-sm py-2">
+        <span className="mr-5 text-gray-400">API Hits:</span>
+        <span className="text-white">{apiHits}</span>
+        <Button className="w-full ml-2 mr-2" variant="premium">
+          Upgrade
+          <Zap className="w-4 h-4 ml-2 fill-white"/>
+        </Button>
       </div>
     </div>
   );

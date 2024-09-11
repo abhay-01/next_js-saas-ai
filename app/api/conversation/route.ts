@@ -1,6 +1,7 @@
 import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
-import Configuration, { ClientOptions, OpenAI } from "openai";
+import Configuration, {OpenAI } from "openai";
+
 
 const config = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
@@ -30,10 +31,13 @@ export async function POST(req: Request) {
         });
     }
 
+
+
  const result = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
       messages: prompt,
  });
+  
 
  return NextResponse.json(result.choices[0].message);
 
