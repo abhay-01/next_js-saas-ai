@@ -1,6 +1,6 @@
 # Navyug
 
-Welcome to TranscendX, the ultimate platform for unleashing creativity and fostering collaboration! Our real-time AI-driven application empowers users to generate a wide range of content types, seamlessly integrating cutting-edge technology with user-friendly features.
+Welcome to Navyug, the ultimate platform for unleashing creativity and fostering collaboration! Our real-time AI-driven application empowers users to generate a wide range of content types, seamlessly integrating cutting-edge technology with user-friendly features.
 
 ## Key Features
 
